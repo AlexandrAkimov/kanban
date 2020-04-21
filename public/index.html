@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./fonts/material-icons.css">
+    <link rel="stylesheet" href="index.css">
+    <title>Kanban App</title>
+</head>
+
+<body>
+    <main class="wrapper">
+        <div class="content">
+            <header class="header">
+                <div class="header__left">
+                    <p class="header__logo__title">awesome kanban board</p>
+                </div>
+                <div class="header__right">
+                    <div class="header__avatar">
+                        <img src="./img/avatar.png" class="avatar_img" alt="avatar">
+                    </div>
+                    <i class="material-icons icon__avatar">expand_more</i>
+                </div>
+            </header>
+            <section class="kanban__tasks">
+                <article class="kanban__note__unit">
+                    <p class="kanban__note__title">Backlog</p>
+                    <nav class="kanban__note__nav">
+                        <ul class="list" id="list__backlog">
+                            
+                        </ul>
+                    </nav>
+                    <div class="form__backlog">
+                        <label for="name__task">Task name</label>
+                        <input type="text" id="name__task" class="input__backlog">
+                        <label for="description__task">Description</label>
+                        <textarea 
+                            name="description" 
+                            cols="30" 
+                            rows="3" 
+                            id="description__task" 
+                            class="textarea__backlog" 
+                        >
+                        </textarea>
+                    </div>
+                    <button class="note__control" id="btn__open__form"><i class="material-icons">add</i><span>Add card</span></button>
+                    <button class="note__control" id="submit__backlog"><i class="material-icons">add</i><span>Add card</span></button>
+                </article>
+                <article class="kanban__note__unit">
+                    <p class="kanban__note__title">Ready</p>
+                    <nav class="kanban__note__nav">
+                        <ul class="list" id="list__ready">
+                            
+                        </ul>
+                    </nav>
+
+                    <nav class="kanban__note__nav form__ready">
+                        <hr>
+                        <ul class="list" id="list__to__ready">
+                            
+                        </ul>   
+                    </nav>
+                    <button class="deactivate" id="submit__ready"><i class="material-icons">add</i><span>Add card</span></button>
+                </article>
+                <article class="kanban__note__unit">
+                    <p class="kanban__note__title">In progress</p>
+                    <nav class="kanban__note__nav">
+                        <ul class="list" id="list__progress">
+                            
+                        </ul>
+                    </nav>
+
+                    <nav class="kanban__note__nav form__progress">
+                        <hr>
+                        <ul class="list" id="list__to__progress">
+                            
+                        </ul>   
+                    </nav>
+                    <button class="deactivate" id="submit__progress"><i class="material-icons">add</i><span>Add card</span></button>
+                </article>
+                <article class="kanban__note__unit">
+                    <p class="kanban__note__title">Finished</p>
+                    <nav class="kanban__note__nav">
+                        <ul class="list" id="list__finished">
+                            
+                        </ul>
+                    </nav>
+
+                    <nav class="kanban__note__nav form__finished">
+                        <hr>
+                        <ul class="list" id="list__to__finished">
+                            
+                        </ul>   
+                    </nav>
+                    <button class="deactivate" id="submit__finished"><i class="material-icons">add</i><span>Add card</span></button>
+                </article>
+            </section>
+        </div>
+        <footer class="footer">
+            <div class="footer__left">
+                <div class="active__task">
+                    <p class="active__name__text">Active tasks: </p><span class="active__num">< ></span>
+                </div>
+                <div class="finished__task">
+                    <p class="finihsed__name__text">Finished tasks: </p><span class="finished__num">< ></span>
+                </div>
+            </div>
+            <div class="footer__right">
+                <p class="kanban__board__name">Kanban board </p><span> EPAM </span><span>2020</span>
+            </div>
+        </footer>
+    </main>
+    <script src="./view/render.js"></script>
+    <script src="./utils/request.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
