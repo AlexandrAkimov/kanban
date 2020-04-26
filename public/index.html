@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./fonts/material-icons.css">
     <link rel="stylesheet" href="index.css">
+
     <title>Kanban App</title>
 </head>
 
@@ -16,16 +17,41 @@
                 <div class="header__left">
                     <p class="header__logo__title">awesome kanban board</p>
                 </div>
+                <div class="header__center">
+                    <button class="note__control header__button">
+                        <i class="material-icons">add</i>
+                        <span>Create new list</span>
+                    </button>
+                </div>
                 <div class="header__right">
                     <div class="header__avatar">
                         <img src="./img/avatar.png" class="avatar_img" alt="avatar">
                     </div>
                     <i class="material-icons icon__avatar">expand_more</i>
+                    <div class="header__profile">
+                        <nav class="list__profile">
+                            <ul>
+                                <li class="item__profile">Profile</li>
+                                <li class="item__profile">Log Out</li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </header>
             <section class="kanban__tasks">
-                <article class="kanban__note__unit">
-                    <p class="kanban__note__title">Backlog</p>
+                <!-- <article class="kanban__note__unit">
+                    <div class="article__header">
+                        <p class="kanban__note__title">Backlog</p>
+                        <i class="material-icons">more_horiz</i>
+                        <div class="delele__article">
+                            
+                            <button class="note__control">
+                                <span>Delete this list</span>
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <nav class="kanban__note__nav">
                         <ul class="list" id="list__backlog">
                             
@@ -45,7 +71,7 @@
                         </textarea>
                     </div>
                     <button class="note__control" id="btn__open__form"><i class="material-icons">add</i><span>Add card</span></button>
-                    <button class="note__control" id="submit__backlog"><i class="material-icons">add</i><span>Add card</span></button>
+                    <button class="note__control ss" id="submit__backlog"><i class="material-icons">add</i><span>Add card</span></button>
                 </article>
                 <article class="kanban__note__unit">
                     <p class="kanban__note__title">Ready</p>
@@ -55,13 +81,13 @@
                         </ul>
                     </nav>
 
-                    <nav class="kanban__note__nav form__ready">
+                    <nav class="kanban__note__nav form__ready form__prepare">
                         <hr>
                         <ul class="list" id="list__to__ready">
                             
                         </ul>   
                     </nav>
-                    <button class="deactivate" id="submit__ready"><i class="material-icons">add</i><span>Add card</span></button>
+                    <button class="deactivate ss" id="submit__ready"><i class="material-icons">add</i><span>Add card</span></button>
                 </article>
                 <article class="kanban__note__unit">
                     <p class="kanban__note__title">In progress</p>
@@ -71,13 +97,13 @@
                         </ul>
                     </nav>
 
-                    <nav class="kanban__note__nav form__progress">
+                    <nav class="kanban__note__nav form__progress form__prepare">
                         <hr>
                         <ul class="list" id="list__to__progress">
                             
                         </ul>   
                     </nav>
-                    <button class="deactivate" id="submit__progress"><i class="material-icons">add</i><span>Add card</span></button>
+                    <button class="deactivate ss" id="submit__progress"><i class="material-icons">add</i><span>Add card</span></button>
                 </article>
                 <article class="kanban__note__unit">
                     <p class="kanban__note__title">Finished</p>
@@ -87,23 +113,27 @@
                         </ul>
                     </nav>
 
-                    <nav class="kanban__note__nav form__finished">
+                    <nav class="kanban__note__nav form__finished form__prepare">
                         <hr>
                         <ul class="list" id="list__to__finished">
                             
                         </ul>   
                     </nav>
-                    <button class="deactivate" id="submit__finished"><i class="material-icons">add</i><span>Add card</span></button>
-                </article>
+                    <button class="deactivate ss" id="submit__finished"><i class="material-icons">add</i><span>Add card</span></button>
+                </article> -->
             </section>
         </div>
         <footer class="footer">
             <div class="footer__left">
                 <div class="active__task">
-                    <p class="active__name__text">Active tasks: </p><span class="active__num">< ></span>
+                    <p class="active__name__text">Active tasks: </p><span class="active__num">
+                        <>
+                    </span>
                 </div>
                 <div class="finished__task">
-                    <p class="finihsed__name__text">Finished tasks: </p><span class="finished__num">< ></span>
+                    <p class="finihsed__name__text">Finished tasks: </p><span class="finished__num">
+                        <>
+                    </span>
                 </div>
             </div>
             <div class="footer__right">
@@ -111,9 +141,45 @@
             </div>
         </footer>
     </main>
+    <section class="modal">
+        <div class="form__modal">
+            <input type="text" class="input__backlog new__name__list" placeholder="Enter name new list" autofocus>
+            <div class="form__modal__controls">
+                <button class="note__control submit__create">
+                    <span>create</span>
+                    <i class="material-icons">add</i>
+                </button>
+                <button class="note__control close__create">
+                    <span>close</span>
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+
+        </div>
+    </section>
+    <section class="modal__edit">
+        <div class="form__modal">
+            <input type="text" class="input__backlog edit__name__list" placeholder="Enter name new list" autofocus>
+            <div class="form__modal__controls">
+                <button class="note__control submit__edit">
+                    <span>save</span>
+                    <i class="material-icons">save</i>
+                </button>
+                <button class="note__control close__edit">
+                    <span>close</span>
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+
+        </div>
+    </section>
     <script src="./view/render.js"></script>
     <script src="./utils/request.js"></script>
+    <script src="./utils/drag-and-drop.js"></script>
     <script src="app.js"></script>
+    <script>
+
+    </script>
 </body>
 
 </html>

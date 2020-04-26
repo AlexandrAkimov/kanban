@@ -132,7 +132,9 @@
             align-items: center;
             margin-bottom: 40px;
         }
-
+        .close__task {
+            color: black;
+        }
         .icon__close {
             font-size: 40px;
             cursor: pointer;
@@ -160,7 +162,10 @@
                     <header class="acticle__header">
                         <h2 class="kanban__name__task">Yes</h2>
                         <h3 class="kanban__date__task"></h3>
-                        <i class="material-icons icon__close">close</i>
+                        <a href="/" class="close__task">
+                            <i class="material-icons icon__close">close</i>
+                        </a>
+                        
                     </header>
 
                     <p class="kanban__description">stgssr</p>
@@ -223,6 +228,7 @@
             }
             render(reqursion(0));
         })
+
         async function request(url, method = 'GET', data = null) {
             try {
                 const headers = {}
