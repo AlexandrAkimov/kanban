@@ -1,7 +1,9 @@
 
 window.addEventListener('load', async () => {
+    loader.style.display = 'block';
     const data = await request('/api/tasks');
     render(data);
+    loader.style.display = 'none';
 })
 createListBtn.addEventListener('click', () => {
     document.getElementsByClassName('modal')[0].style.display = 'flex';
@@ -14,17 +16,28 @@ submitCreateList.addEventListener('click', async () => {
 
         ]
     }
-    await request('/api/tasks', 'POST', body);
-    const data = await request('/api/tasks');
-    document.getElementsByClassName('modal')[0].style.display = 'none';
-    document.getElementsByClassName('new__name__list')[0].value = '';
-    render(data);
+    if (!document.getElementsByClassName('new__name__list')[0].value) {
+        document.getElementsByClassName('error__new__list')[0].style.display = 'inline'
+    } else {
+        document.getElementsByClassName('error__new__list')[0].style.display = 'none'
+        loader.style.display = 'block';
+        await request('/api/tasks', 'POST', body);
+        const data = await request('/api/tasks');
+        document.getElementsByClassName('modal')[0].style.display = 'none';
+        document.getElementsByClassName('new__name__list')[0].value = '';
+        render(data);
+        loader.style.display = 'none';
+
+    }
 })
 closeCreateList.addEventListener('click', async () => {
+    document.getElementsByClassName('error__new__list')[0].style.display = 'none'
     document.getElementsByClassName('modal')[0].style.display = 'none';
     document.getElementsByClassName('new__name__list')[0].value = '';
 })
 closeEditList.addEventListener('click', async () => {
+    document.getElementsByClassName('error__new__list')[1].style.display = 'none';
+    document.getElementsByClassName('error__new__list')[0].style.display = 'none'
     document.getElementsByClassName('modal__edit')[0].style.display = 'none';
     document.getElementsByClassName('edit__name__list')[0].value = '';
 
@@ -35,17 +48,16 @@ document.getElementsByClassName('icon__avatar')[0]
         isProfile = !isProfile;
         if (isProfile) {
             document.getElementsByClassName('header__profile')[0].style.display = 'block';
-            document.getElementsByClassName('kanban__tasks')[0].style.marginTop = '100px';
             document.getElementsByClassName('icon__avatar')[0].innerText = 'expand_less';
         } else {
             document.getElementsByClassName('header__profile')[0].style.display = 'none';
-            document.getElementsByClassName('kanban__tasks')[0].style.marginTop = '20px';
             document.getElementsByClassName('icon__avatar')[0].innerText = 'expand_more';
         }
     })
 var idx
 document.getElementsByClassName('kanban__tasks')[0].addEventListener('click', async e => {
     if (e.target.classList.contains('list__item__prepare')) {
+        loader.style.display = 'block';
         document.getElementsByClassName('form__prepare')[idx - 1].style.display = 'none'
         const targetId = e.target.id;
         const data = await request('/api/tasks');
@@ -65,8 +77,10 @@ document.getElementsByClassName('kanban__tasks')[0].addEventListener('click', as
         })
         const updateData = await request('/api/tasks');
         render(updateData);
+        loader.style.display = 'none';
 
     } else if (e.target.parentNode.children[1].textContent === 'Add card') {
+
         if (e.target.parentNode.id === 'btn__open__form') {
             //openForm();
             document.getElementById('btn__open__form').style.display = 'none'
@@ -81,20 +95,27 @@ document.getElementsByClassName('kanban__tasks')[0].addEventListener('click', as
             })
             if (idx === 0) {
                 //add NEW task from form
-                await request('/api/tasks/update', 'POST', {
-                    id: Date.now().toString(),
-                    name: document.getElementsByClassName('input__backlog')[0].value,
-                    description: document.getElementsByClassName('textarea__backlog')[0].value
-                })
-                const dataUp = await request('/api/tasks');
-                render(dataUp);
-                btnOpenForm.style.display = 'flex';
-                submitBacklog.style.display = 'none';
-                formBacklog[0].style.display = 'none'
-                nameTask.value = '';
-                descriptionTask.value = '';
+                if (!document.getElementsByClassName('input__backlog')[0].value) {
+                    document.getElementsByClassName('lanel__name')[0].innerText = 'Task name is required'
+                    document.getElementsByClassName('lanel__name')[0].style.color = 'red'
+                } else {
+                    document.getElementsByClassName('lanel__name')[0].innerText = 'Task name'
+                    document.getElementsByClassName('lanel__name')[0].style.color = '#000'
+                    loader.style.display = 'block';
+                    await request('/api/tasks/update', 'POST', {
+                        id: Date.now().toString(),
+                        name: document.getElementsByClassName('input__backlog')[0].value,
+                        description: document.getElementsByClassName('textarea__backlog')[0].value
+                    })
+                    const dataUp = await request('/api/tasks');
+                    loader.style.display = 'none';
+                    render(dataUp);
+
+                }
+
             } else {
                 //create list prepare for moving task
+                loader.style.display = 'block';
                 document.getElementsByClassName('form__prepare')[idx - 1].style.display = 'block';
                 document.getElementsByClassName('form__prepare')[idx - 1].innerHTML = '';
                 const data = await request('/api/tasks')
@@ -105,7 +126,7 @@ document.getElementsByClassName('kanban__tasks')[0].addEventListener('click', as
                     li.innerText = item.name
                     document.getElementsByClassName('form__prepare')[idx - 1].appendChild(li)
                 })
-
+                loader.style.display = 'none';
             }
         }
     } else if (e.target.textContent === 'more_horiz') {
@@ -130,11 +151,13 @@ document.getElementsByClassName('kanban__tasks')[0].addEventListener('click', as
                 idx = i
             }
         })
+        loader.style.display = 'block';
         await request('/api/tasks/remove', 'POST', {
             idx
         });
         const dataAfterRemove = await request('/api/tasks');
         render(dataAfterRemove);
+        loader.style.display = 'none';
     } else if (e.target.parentNode.children[0].textContent === 'Edit') {
         const btnsEdit = document.querySelectorAll('.btn__edit');
         btnsEdit.forEach((item, i) => {
@@ -156,13 +179,20 @@ document.getElementsByClassName('kanban__tasks')[0].addEventListener('click', as
     }
 })
 document.getElementsByClassName('submit__edit')[0]
-.addEventListener('click', async () => {
-    await request('/api/tasks/edit', 'POST', {
-        title: document.getElementsByClassName('edit__name__list')[0].value,
-        idx
+    .addEventListener('click', async () => {
+        if (!document.getElementsByClassName('edit__name__list')[0].value) {
+            document.getElementsByClassName('error__new__list')[1].style.display = 'inline';
+        } else {
+            document.getElementsByClassName('error__new__list')[1].style.display = 'none';
+            loader.style.display = 'block';
+            await request('/api/tasks/edit', 'POST', {
+                title: document.getElementsByClassName('edit__name__list')[0].value,
+                idx
+            })
+            const dataAfterEdit = await request('/api/tasks');
+            document.getElementsByClassName('modal__edit')[0].style.display = 'none';
+            render(dataAfterEdit);
+            loader.style.display = 'none';
+        }
     })
-    const dataAfterEdit = await request('/api/tasks');
-    document.getElementsByClassName('modal__edit')[0].style.display = 'none';
-    render(dataAfterEdit);
-})
 

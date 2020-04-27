@@ -18,7 +18,7 @@ const createListBtn = document.getElementsByClassName('header__button')[0];
 const submitCreateList = document.getElementsByClassName('submit__create')[0];
 const closeCreateList = document.getElementsByClassName('close__create')[0];
 const closeEditList = document.getElementsByClassName('close__edit')[0];
-
+const loader = document.getElementsByClassName('modal__loader')[0];
 function render(data) {
     document.getElementsByClassName('kanban__tasks')[0].innerHTML = '';
     if (!data.length) {
@@ -84,6 +84,7 @@ function render(data) {
             divForm.className = 'form__backlog';
             const labelName = document.createElement('label');
             labelName.setAttribute('for', 'name__task');
+            labelName.className = 'lanel__name'
             labelName.innerText = 'Task name'
             const labelDescription = document.createElement('label');
             labelDescription.innerText = 'Description';

@@ -38,7 +38,9 @@
                     </div>
                 </div>
             </header>
+            
             <section class="kanban__tasks">
+               
                 <!-- <article class="kanban__note__unit">
                     <div class="article__header">
                         <p class="kanban__note__title">Backlog</p>
@@ -154,6 +156,7 @@
                     <i class="material-icons">close</i>
                 </button>
             </div>
+            <small class="error__new__list">Name list is required!</small>
 
         </div>
     </section>
@@ -170,8 +173,11 @@
                     <i class="material-icons">close</i>
                 </button>
             </div>
-
+            <small class="error__new__list">Name list is required!</small>
         </div>
+    </section>
+    <section class="modal__loader" style="display: flex;">
+        <div class="loader">Loading...</div>        
     </section>
     <script src="./view/render.js"></script>
     <script src="./utils/request.js"></script>

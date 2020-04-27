@@ -1,28 +1,31 @@
 var idxTarget;
 var idxTargetList;
 var hrefId
-var DragManager = new function () {
+const DragManager = new function () {
     var dragObject = {};
     var self = this;
-    function onMouseDown(e) {
-        const href = e.target.parentNode.getAttribute('href')
-        hrefId = href.split('/').reverse()[0];
-        if (e.which != 1) return;
-        var elem = e.target.parentNode
-        var nav = e.target.parentNode.parentNode.parentNode;
-        const navs = document.querySelectorAll('.nav__main');
-        navs.forEach((el, i) => {
-            if (el === nav) {
-                idxTarget = i
-            }
-        });
-        if (!elem) return;
-        dragObject.elem = elem;
-        dragObject.downX = e.pageX;
-        dragObject.downY = e.pageY;
-        return false;
+    const onMouseDown = e => {
+        if (e.target.parentNode.hasAttribute('href')) {
+            const href = e.target.parentNode.getAttribute('href')
+            hrefId = href.split('/').reverse()[0];
+            if (e.which != 1) return;
+            var elem = e.target.parentNode
+            var nav = e.target.parentNode.parentNode.parentNode;
+            const navs = document.querySelectorAll('.nav__main');
+            navs.forEach((el, i) => {
+                if (el === nav) {
+                    idxTarget = i
+                }
+            });
+            if (!elem) return;
+            dragObject.elem = elem;
+            dragObject.downX = e.pageX;
+            dragObject.downY = e.pageY;
+            return false;
+        }
+
     }
-    function onMouseMove(e) {
+    const onMouseMove = e => {
         if (!dragObject.elem) return;
         if (!dragObject.avatar) {
             var moveX = e.pageX - dragObject.downX;
@@ -44,46 +47,56 @@ var DragManager = new function () {
         dragObject.avatar.style.top = e.pageY - dragObject.shiftY + 'px';
         return false;
     }
-    async function onMouseUp(e) {
-        const targetList = e.target.parentNode.parentNode;
-        const lists = document.querySelectorAll('.list__main');
-        const articles = document.querySelectorAll('.kanban__note__unit');
-        lists.forEach((el, i) => {
-            if (el === targetList) {
-                idxTargetList = i;
-            }
-        });
-        if (!idxTargetList) {
-            articles.forEach((el, i) => {
-                if (el === targetList) {
-                    idxTargetList = i;
+    const onMouseUp = async e => {
+        if (e.target.parentNode.parentNode.classList.contains('list__main') || e.target.parentNode.parentNode.classList.contains('kanban__note__unit')) {
+                console.log(e.target.parentNode.parentNode.classList);
+                
+                const targetList = e.target.parentNode.parentNode;
+                const lists = document.querySelectorAll('.list__main');
+                const articles = document.querySelectorAll('.kanban__note__unit');
+                lists.forEach((el, i) => {
+                    if (el === targetList) {
+                        idxTargetList = i;
+                    }
+                });
+                if (!idxTargetList) {
+                    articles.forEach((el, i) => {
+                        if (el === targetList) {
+                            idxTargetList = i;
+                        }
+                    });
                 }
-            });
-        }
-        if (idxTargetList - idxTarget === 1) {
-            const data = await request('/api/tasks');
-            const targetTask = data[idxTarget].issues.find(item => item.id === hrefId)
-            await request('/api/tasks/update-progress', 'POST', {
-                id: targetTask.id,
-                name: targetTask.name,
-                description: targetTask.description,
-                idx: idxTargetList
-            });
-            await request('/api/tasks/update-progress', 'DELETE', {
-                id: targetTask.id,
-                name: targetTask.name,
-                description: targetTask.description,
-                idx: idxTarget
-            })
-            const updateData = await request('/api/tasks');
-            render(updateData);
+                if (idxTargetList - idxTarget === 1) {
+
+                    const data = await request('/api/tasks');
+                    const targetTask = data[idxTarget].issues.find(item => item.id === hrefId)
+                    await request('/api/tasks/update-progress', 'POST', {
+                        id: targetTask.id,
+                        name: targetTask.name,
+                        description: targetTask.description,
+                        idx: idxTargetList
+                    });
+                    await request('/api/tasks/update-progress', 'DELETE', {
+                        id: targetTask.id,
+                        name: targetTask.name,
+                        description: targetTask.description,
+                        idx: idxTarget
+                    })
+                    const updateData = await request('/api/tasks');
+                    render(updateData);
+
+                }
+            
+
+
         }
         if (dragObject.avatar) {
             finishDrag(e);
         }
         dragObject = {};
+
     }
-    function finishDrag(e) {
+    const finishDrag = e => {
         var dropElem = findDroppable(e);
         if (!dropElem) {
             self.onDragCancel(dragObject);
@@ -91,9 +104,9 @@ var DragManager = new function () {
             self.onDragEnd(dragObject, dropElem);
         }
     }
-    function createAvatar(e) {
-        var avatar = dragObject.elem;
-        var old = {
+    const createAvatar = e => {
+        const avatar = dragObject.elem;
+        const old = {
             parent: avatar.parentNode,
             nextSibling: avatar.nextSibling,
             position: avatar.position || '',
@@ -110,15 +123,15 @@ var DragManager = new function () {
         };
         return avatar;
     }
-    function startDrag(e) {
-        var avatar = dragObject.avatar;
+    const startDrag = e => {
+        const avatar = dragObject.avatar;
         document.body.appendChild(avatar);
         avatar.style.zIndex = 9999;
         avatar.style.position = 'absolute';
     }
-    function findDroppable(event) {
+    const findDroppable = event => {
         dragObject.avatar.hidden = true;
-        var elem = document.elementFromPoint(event.clientX, event.clientY);
+        const elem = document.elementFromPoint(event.clientX, event.clientY);
         dragObject.avatar.hidden = false;
         if (elem == null) {
             return null;
@@ -137,8 +150,8 @@ var DragManager = new function () {
     this.onDragEnd = function (dragObject, dropElem) { };
     this.onDragCancel = function (dragObject) { };
 };
-function getCoords(elem) {
-    var box = elem.getBoundingClientRect();
+const getCoords = elem => {
+    const box = elem.getBoundingClientRect();
 
     return {
         top: box.top + pageYOffset,
